@@ -22,9 +22,6 @@ function App() {
                 <h1>Sanity frontend project</h1>
 
                 <Pets />
-                {/* <div>
-                <pre>{JSON.stringify(pets, null, 2)}</pre>
-            </div> */}
 
                 <div>
                     <pre></pre>

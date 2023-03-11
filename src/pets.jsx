@@ -10,8 +10,6 @@ function urlFor(source) {
 }
 
 const Pets = () => {
-    // const [pets, setPets] = useState([]);
-
     let PROJECT_ID = import.meta.env.VITE_PROJECT_ID;
     let DATASET = import.meta.env.VITE_DATASET;
 
@@ -29,18 +27,26 @@ const Pets = () => {
     // if (error) return <p>An error occurred: {error.message}</p>;
 
     return (
-        <ul>
-            {data.result.map(pet => {
-                return (
-                    <li key={pet.name} className='list-item'>
-                        Name - {pet.name} <br /> Age - {pet.age}
-                        <div className='img-wrapper'>
-                            <img src={urlFor(pet.image).auto("format").url()} />
-                        </div>
-                    </li>
-                );
-            })}
-        </ul>
+        <>
+            <ul>
+                {data.result.map(pet => {
+                    return (
+                        <li key={pet.name} className='list-item'>
+                            Name - {pet.name} <br /> Age - {pet.age}
+                            <div className='img-wrapper'>
+                                <img
+                                    src={urlFor(pet.image).auto("format").url()}
+                                />
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
+
+            {/* <div>
+                <pre>{JSON.stringify(pets, null, 2)}</pre>
+            </div> */}
+        </>
     );
 };
 
