@@ -28,6 +28,7 @@ const Pets = () => {
                 console.log(queryKey);
                 return [...POSTS];
             }),
+        staleTime: 1000 * 60 * 1,
     });
 
     // const newPostMutation = useMutation({
