@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { configuredClient } from "./sanity";
 import imageUrlBuilder from "@sanity/image-url";
-import { URL } from "./petsUtils";
+import { fetchPet } from "./petsUtils";
 
 const builder = imageUrlBuilder(configuredClient);
 
@@ -21,15 +22,17 @@ function wait(duration) {
 
 const Pets = () => {
     const queryClient = useQueryClient();
-    const postsQuery = useQuery({
-        queryKey: ["pets"],
-        queryFn: ({ queryKey }) =>
-            wait(1000).then(() => {
-                console.log(queryKey);
-                return [...POSTS];
-            }),
-        staleTime: 1000 * 60 * 1,
-    });
+    const petsQuery = useQuery(["pets"], fetchPet);
+    // const petsQuery = useQuery({
+    //     queryKey: ["pets"],
+    //     queryFn: ({ queryKey }) =>
+    //         fetchPet(queryKey).then(res => {
+    //             console.log(queryKey);
+    //             return res;
+    //         }),
+    // });
+
+    console.log(petsQuery.data);
 
     // const newPostMutation = useMutation({
     //     mutationFn: title => {
@@ -42,20 +45,25 @@ const Pets = () => {
     //     },
     // });
 
-    console.log(POSTS);
+    if (petsQuery.isLoading) return <p>Loading...</p>;
 
-    if (postsQuery.isLoading) return <p>Loading...</p>;
-
-    if (postsQuery.isError)
-        return <pre>{JSON.stringify(postsQuery.error)}</pre>;
+    if (petsQuery.isError) {
+        return <p>{petsQuery.error.message}</p>;
+    }
 
     return (
         <>
             <ul>
-                {postsQuery.data?.map(post => (
-                    <li key={post.id}>{post.title}</li>
-                ))}
+                <li>
+                    <Link to='/'>Home</Link>
+                </li>
 
+                <li>
+                    <Link to='pet'>Pet</Link>
+                </li>
+            </ul>
+
+            <ul>
                 {/* <button
                     disabled={newPostMutation.isLoading}
                     onClick={() =>
@@ -65,7 +73,7 @@ const Pets = () => {
                     }>
                     Add New Post
                 </button> */}
-                {/* {data.result.map(pet => {
+                {petsQuery.data.result.map(pet => {
                     return (
                         <li key={pet.name} className='list-item'>
                             Name - {pet.name} <br /> Age - {pet.age}
@@ -76,12 +84,8 @@ const Pets = () => {
                             </div>
                         </li>
                     );
-                })} */}
+                })}
             </ul>
-
-            {/* <div>
-                <pre>{JSON.stringify(pets, null, 2)}</pre>
-            </div> */}
         </>
     );
 };
